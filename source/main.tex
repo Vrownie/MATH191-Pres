@@ -1,0 +1,286 @@
+\documentclass[handout]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[backend=biber]{biblatex}
+\addbibresource{main.bib}
+
+\usetheme{Antibes}
+\usecolortheme{seahorse}
+
+%------------------------------------------------------------
+%This block of code defines the information to appear in the
+%Title page
+\title{Topological Ramsey Theory: Ellentuck's Theorem}
+\subtitle{Math 191 - Winter 2022}
+\author{Young He}
+\institute
+{
+  Department of Mathematics\\
+  University of California, Los Angeles
+}
+\date{March 10, 2022}
+% \logo{\includegraphics[height=1cm]{overleaf-logo}}
+%End of title page configuration block
+%------------------------------------------------------------
+
+%------------------------------------------------------------
+%The next block of commands puts the table of contents at the 
+%beginning of each section and highlights the current section:
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+%------------------------------------------------------------
+\begin{document}
+%The next statement creates the title page.
+\frame{\titlepage}
+%---------------------------------------------------------
+%This block of code is for the table of contents after
+%the title page
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+%---------------------------------------------------------
+
+\section{Introduction and Motivation}
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Introduction}
+Recall the classical formulation to Ramsey's Theorem: 
+\begin{alertblock}{Theorem (Ramsey)}
+For any $k,n,r\in\mathbb{Z}^+$, there exists an $N$ such that $N \rightarrow (k)^n_r$. 
+\end{alertblock} \pause
+This can be easily generalized to the case when our set is infinite. In fact, this is the original formulation that Ramsey came up with\footnotemark: 
+\begin{alertblock}{Theorem (Ramsey)}
+Let $\chi$ be a finite coloring on $[\omega]^k$ for some $k\in\mathbb{Z}^+$. Then, there exists an infinite $W\subseteq\omega$ such that $\chi|_{[W]^k}$ is constant. 
+\end{alertblock} \pause
+\begin{itemize}
+    \item Can this result be generalized further? 
+\end{itemize}
+\footnotetext<3->{A little caveat: Ramsey actually proved something a little bit stronger, as he showed the same result for arbitrary infinite sets. }
+\end{frame}
+%---------------------------------------------------------
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Motivation}
+What if we consider arbitrary collections of subsets on $\omega$? \pause
+\begin{itemize}
+    \item<1-> Unfortunately, no. As an example, $[\omega]^{<\omega}$ doesn't works: 
+\end{itemize}
+\begin{exampleblock}{Counterexample}
+For any $a\in[\omega]^{<\omega}$, let $\chi(a)=|a|\mod 2$. In other words, color $a$ red if $|a|$ is even, and color it blue otherwise.  
+\end{exampleblock} \pause
+\begin{itemize}
+    \item Clearly, no subset of $[\omega]^{<\omega}$ cannot be homogeneous in $\chi$. 
+\end{itemize} \pause
+Ellentuck's work gave a topological characterization for which subsets of $[\omega]^\omega$ can have "Ramsey like" properties. 
+\end{frame}
+%---------------------------------------------------------
+
+\section{Notations and Definitions}
+
+\subsection{Basic Notations}
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Notational Conventions}
+The following notation will be used throughout the presentation: \pause
+
+\begin{itemize}
+    \item<2-> $a,b,x\dots$ are finite subsets of $\omega$, i.e. $a\in[\omega]^{<\omega}$
+    \item<3-> $A,B,X\dots$ are infinite subsets of $\omega$, i.e. $A\in[\omega]^\omega$
+    \item<4-> $[a, A]^\omega = \{B\in[\omega]^\omega\mid a\subseteq B\subseteq a\cup A_{>a}\}$, where\footnotemark: 
+    \begin{itemize}
+        \item<4-> $A_{>a}=\{n\in A\mid\forall m\in a, n>m\}$
+    \end{itemize}
+    \item<5-> Symmetric difference: $A\triangle B = (A-B)\cup (B-A)$
+\end{itemize}
+\footnotetext<4->{To amuse you, sets of this form are called donuts. The motivation behind this name is quite clear.}
+\end{frame}
+
+%---------------------------------------------------------
+
+\subsection{Essential Definitions}
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{The Ramsey Property}
+
+The following properties on collections of infinite subsets in $\omega$ determine whether they behave like "colorings" or not. \pause
+\begin{block}{Definition (Ramsey property)}
+Given a set $W\subseteq[\omega]^\omega$, we say that $W$ is \alert{Ramsey} if there is some $a\in[\omega]^\omega$, such that either $[a]^\omega\subseteq W$ or $[a]^\omega\cap W=\emptyset$. 
+\end{block}
+\pause
+
+A stronger (and more useful) condition is: 
+\begin{block}{Definition (complete Ramsey property)}
+Given a set $W\subseteq[\omega]^\omega$, we say that $W$ is \alert{completely Ramsey} if for each $a$ and $A$, either $[a,A]^\omega\subseteq W$ or $[a,A]^\omega\cap W=\emptyset$. 
+\end{block}
+\end{frame}
+%---------------------------------------------------------
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{The Baire Property}
+We need a few basic topology concepts for our characterization.  \pause
+\begin{block}{Definition (topology terms)}
+Let $X$ be a topological space, then:
+\begin{itemize}
+    \item $A\subseteq X$ is \alert{dense} if $X\cap O$ is nonempty for any open set $O$.
+    \item $B\subseteq X$ is \alert{nowhere dense} if $\overline{X}$ contains a dense open set.
+    \item A countable union of nowhere dense sets is \alert{meager}.
+\end{itemize}
+\end{block}
+\pause
+Now, we can define the Baire property: \pause
+\begin{block}{Definition (Baire property)}
+$A$ is \alert{Baire} if there is some open set $O$ such that $A\triangle O$ is meager. 
+\end{block}
+\end{frame}
+%---------------------------------------------------------
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{The Ellentuck Topology}
+Ellentuck defined\footnotemark the following topology on $[\omega]^\omega$: 
+\begin{block}{Definition (Ellentuck topology)}
+Denote $\mathcal{O}=\{\emptyset\}\cup\{[a,A]^\omega\}$. Then, $([\omega]^\omega, \mathcal{O})$ is a topological space and $\mathcal{O}$ is called the \alert{Ellentuck topology}. 
+\end{block}
+\pause
+We will not prove them here, but $\mathcal{O}$ intuitively satisfies the three topology axioms. Notably, $\mathcal{O}$ also has the following property:
+\begin{itemize}
+    \item $[a,A]^\omega\cap[b,B]^\omega$ is either empty or $[a\cup b,A\cap B]^\omega$. 
+    \item Singleton sets are nowhere dense, countable sets are meager. 
+    \item Open sets are completely Ramsey. 
+\end{itemize}
+\footnotetext{Ellentuck himself, in fact, did not name it after himself. He simply referred to this construction as the "classical" topology. }
+\end{frame}
+%---------------------------------------------------------
+
+\section{Ellentuck's Theorem}
+
+\subsection{Statement of the Theorem}
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Ellentuck's Theorem}
+Ellentuck, in his 1974 paper, showed the following fact about collections of infinite subsets in $\omega$: \pause
+\begin{alertblock}{Theorem (Ellentuck, 1974)}
+Let $W\subseteq[\omega]^\omega$. Then, $W$ is completely Ramsey if and only if $W$ is Baire in the Ellentuck Topology. 
+\end{alertblock} \pause
+We now give an outline to the proof of Ellentuck's theorem. \pause
+\begin{itemize}[<+->]
+    \item His original proof used the Galvin-Prikry theorem, a result that formulates a similar characterization for Borel sets. 
+    \item It generalizes a theorem of Silver about analytic ($\Sigma_1^1$) sets. 
+    \item However, we will follow the modified approach published by Matet in 2001 that simplifies the argument. 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------
+
+\subsection{Proof of Ellentuck's Theorem ("only if")}
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Proving Ellentuck's Theorem}
+We first show the forward direction of Ellentuck's theorem. 
+\begin{itemize}
+    \item<2-> Let $W\subseteq [\omega]^\omega$ be completely Ramsey. Then, define: 
+        $$O_W = \bigcup \{[a,A]^\omega\mid [a,A]^\omega\subseteq W\}$$
+    \item<3-> Since any open set in the Ellentuck topology has the form $S=[a,A]^\omega$, any such $S$ must either be in $O_W$ or $O_{\overline{W}}$. Thus, $O_W\cup O_{\overline{W}}$ is dense. 
+    \item<4-> Clearly, $O_W\subseteq W$ and $O_{\overline{W}}\subseteq\overline{W}$. Thus, $O_W$ and $O_{\overline{W}}$ both have trivial intersections with $W-O_{W}$; that is, $(W-O_{W})\cap(O_W\cup O_{\overline{W}})=\emptyset$. So $W-O_W$ is nowhere dense. 
+    \item<5-> Now $W\triangle O_W=W-O_W$ is meager, i.e. $W$ is Baire. \qed
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------
+
+\subsection{Helpful Lemmas}
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Lemmas}
+The backwards direction of Ellentuck's theorem is more involved. We need a few lemmas which will not be proved here.
+\end{frame}
+%---------------------------------------------------------
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Lemma 1}
+Define the set $\mathcal{N}$ to be the collection of all $W$ such that: 
+\begin{itemize}
+    \item For all $a, A$, there exists $b,B$ with $[b,B]^\omega\subseteq[a,A]^\omega-W$.  
+\end{itemize} \pause
+Then, the following fact holds about $\mathcal{N}$. 
+\begin{block}{Lemma}
+$\mathcal{N}$ is closed under countable unions. 
+\end{block} \pause
+This is a consequence of a lemma due to Matet based on an argument of Mathias. 
+\begin{block}{Lemma (Matet)}
+Let $W_i\subseteq[\omega]^\omega$ such that $[a,B]^\omega\notin\bigcap W_i$ for each $B\in [A]^\omega$. Then, there exists $c,C$ such that for some $W_i$, $[d,D]^\omega\nsubseteq W_i$ for every $[d,D]^\omega\subseteq [c,C]^\omega$.
+\end{block} 
+\end{frame}
+%---------------------------------------------------------
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Lemma 2}
+Similarly, we define the set $\mathcal{C}$ to be all $W$ such that:
+\begin{itemize}
+    \item there exists $b,B$ with $[b,B]^\omega\subseteq[a,A]^\omega$, and either $[b,B]^\omega\subseteq W$ or $[b,B]^\omega\cap W=\emptyset$.  
+\end{itemize} \pause
+Then, the following fact holds about $\mathcal{C}$. 
+\begin{block}{Lemma}
+Every member of $\mathcal{C}$ is completely Ramsey. 
+\end{block} \pause
+This can also be derived from Matet's lemma from above.\footnotemark
+\footnotetext<3->{In fact, this lemma is the key concept that allowed Matet to achieve a short proof. The conventional proof of the theorem follows the same "track", but relied on a different (more stringent) construction to $\mathcal{N}$ and $\mathcal{C}$: replacing $[a,B]^\omega$ instead of $[b,B]^\omega$ in each construction. }
+\end{frame}
+%---------------------------------------------------------
+
+\subsection{Proof of Ellentuck's Theorem ("if")}
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Proving Ellentuck's Theorem}
+Now, we proceed with the backwards direction of the theorem: \pause
+\begin{itemize}
+    \item<2-> Let $W$ have the Baire property. Then, $W\triangle O$ is meager for some open set $O$. 
+\end{itemize} \pause
+We first show that $W\triangle O\in \mathcal{N}$. \pause
+\begin{itemize}
+    \item<4-> As $W\triangle O$ is meager, $W\triangle O=\bigcup S_i$ with $S_i$ nowhere dense. There exists $\tilde{S_i}$ disjoint from $S_i$ that is dense; i.e. $\tilde{S_i}\subseteq \overline{S_i}$. 
+    \item<5-> Then since each $[a,A]^\omega$ is open, we have:  $$[a,A]^\omega-S_i=[a,A]^\omega\cap\overline{S_i}\supseteq [a,A]^\omega\cap\tilde{S_i}=[\tilde{a},\tilde{A}]^\omega$$
+    Since $\tilde{S_i}$ is dense and $[a,A]^\omega\cap\tilde{S_i}$ is open. 
+    \item<6-> Thus $S_i\in \mathcal{N}$, and by Lemma 1 $W\triangle O\in \mathcal{N}$ holds as well. 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Proving Ellentuck's Theorem}
+We then show that $W\in \mathcal{C}$. \pause
+\begin{itemize}[<+->]
+    \item Let $a,A$ be arbitrary. Then by above, there are $b, B$ such that: 
+    $$[b,B]^\omega\subseteq[a,A]^\omega-(W\triangle O) \subseteq (W\cap O)\cup(\overline{W\cup O})$$
+    \item $[b,B]^\omega\subseteq[a,A]^\omega$ is clear. By above, if it falls into the first half of the union, then clearly  $[b,B]^\omega\subseteq W$; otherwise, it is also evident that $[b,B]^\omega\cap W=\emptyset$.
+    \item By construction, we have $W\in\mathcal{C}$. 
+\end{itemize} \pause
+Now by Lemma 2, we have that $W$ is completely Ramsey. \qed
+\end{frame}
+%---------------------------------------------------------
+\section{Citations}
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Bibliography}
+\begin{itemize}
+    \item Combinatorial Set Theory, With a Gentle Introduction to Forcing - by L. Halbeisen
+    \item Introduction to Ramsey Spaces - by S. Todorcevic
+    \item Happy Families - by A. Mathias
+    \item A Short Proof of Ellentuck's Theorem - by P. Matet
+    \item Infinite Ramsey Theory - by A. Miller
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------
+
+\end{document}
